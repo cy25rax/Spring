@@ -3,7 +3,9 @@ package ru.gb.springdemo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.gb.springdemo.api.IssueRequest;
+import ru.gb.springdemo.exceptions.ReaderMaxAllowedBookException;
 import ru.gb.springdemo.model.Issue;
+import ru.gb.springdemo.model.Reader;
 import ru.gb.springdemo.repository.BookRepository;
 import ru.gb.springdemo.repository.IssueRepository;
 import ru.gb.springdemo.repository.ReaderRepository;
@@ -21,16 +23,38 @@ public class IssuerService {
 
   public Issue issue(IssueRequest request) {
     if (bookRepository.getBookById(request.getBookId()) == null) {
-      throw new NoSuchElementException("Не найдена книга с идентификатором \"" + request.getBookId() + "\"");
+      throw new NoSuchElementException("Book not found with id: \"" + request.getBookId() + "\"");
     }
-    if (readerRepository.getReaderById(request.getReaderId()) == null) {
-      throw new NoSuchElementException("Не найден читатель с идентификатором \"" + request.getReaderId() + "\"");
+    Reader reader = readerRepository.getReaderById(request.getReaderId());
+    if (reader == null) {
+      throw new NoSuchElementException("Reader not found with id: \"" + request.getReaderId() + "\"");
     }
-    // можно проверить, что у читателя нет книг на руках (или его лимит не превышает в Х книг)
+    reader.setMaxBookCount(reader.getMaxBookCount() - 1);
+    if (reader.getMaxBookCount() < 0) {
+      reader.setMaxBookCount(reader.getMaxBookCount() + 1);
+      throw new ReaderMaxAllowedBookException("Reader have max book count \"" + request.getReaderId() + "\"");
+    }
 
     Issue issue = new Issue(request.getBookId(), request.getReaderId());
     issueRepository.save(issue);
     return issue;
   }
 
+  public Issue getIssueById(Long id) {
+    return issueRepository.getIssueById(id);
+  }
+
+  public Issue closeIssue(Long issueID) {
+    Issue issue = issueRepository.getIssueById(issueID);
+    if (issue == null) {
+      throw new NoSuchElementException("Issue not found with id: \"" + issueID + "\"");
+    }
+    Reader reader = readerRepository.getReaderById(issue.getReaderId());
+    reader.setMaxBookCount(reader.getMaxBookCount() + 1);
+    Issue closedIssue = issueRepository.closeIssue(issueID);
+    if (closedIssue == null) {
+      throw new NoSuchElementException("Issue already closed with id: \"" + issueID + "\"");
+    }
+    return closedIssue;
+  }
 }

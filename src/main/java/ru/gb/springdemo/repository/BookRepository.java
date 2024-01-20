@@ -1,5 +1,6 @@
 package ru.gb.springdemo.repository;
 
+import com.example.models.Student;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Repository;
 import ru.gb.springdemo.model.Book;
@@ -32,4 +33,21 @@ public class BookRepository {
       .orElse(null);
   }
 
+  public boolean deleteBook(Long id) {
+    Book removingBook = getBookById(id);
+    if (removingBook != null) {
+      books.remove(removingBook);
+      return true;
+    }
+    return false;
+  }
+
+  public boolean createBook(Book book) {
+    Book newBook = new Book(book.getName());
+    books.add(newBook);
+    if (books.contains(newBook)) {
+      return true;
+    }
+    return false;
+  }
 }
