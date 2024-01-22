@@ -43,4 +43,8 @@ public class IssueRepository {
             .findFirst()
             .orElse(null);
   }
+
+    public List<Issue> getAllIssues() {
+      return List.copyOf(issues);
+    }
 }
