@@ -50,4 +50,8 @@ public class BookRepository {
     }
     return false;
   }
+
+    public List<Book> getAllBooks() {
+      return List.copyOf(books);
+    }
 }

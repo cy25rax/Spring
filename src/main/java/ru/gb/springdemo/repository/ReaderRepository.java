@@ -56,4 +56,7 @@ public class ReaderRepository {
         return false;
     }
 
+    public List<Reader> getAllReaders() {
+        return List.copyOf(readers);
+    }
 }

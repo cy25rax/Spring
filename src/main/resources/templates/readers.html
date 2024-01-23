@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Readers</title>
+</head>
+<body>
+<h1>Список читателей:</h1>
+<ol>
+    <li th:each="reader : ${readers}" >
+        <a href="#" th:href="@{/ui/readers/{readerId}(readerId=${reader.id})}"
+           th:text="${reader.name}"></a>
+    </li>
+</ol>
+</body>
+</html>

@@ -3,6 +3,7 @@ package ru.gb.springdemo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.gb.springdemo.api.IssueRequest;
+import ru.gb.springdemo.dto.IssueDetails;
 import ru.gb.springdemo.exceptions.ReaderMaxAllowedBookException;
 import ru.gb.springdemo.model.Issue;
 import ru.gb.springdemo.model.Reader;
@@ -10,7 +11,9 @@ import ru.gb.springdemo.repository.BookRepository;
 import ru.gb.springdemo.repository.IssueRepository;
 import ru.gb.springdemo.repository.ReaderRepository;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,4 +60,19 @@ public class IssuerService {
     }
     return closedIssue;
   }
+
+    public List<Issue> getAllIssues() {
+      return issueRepository.getAllIssues();
+    }
+
+    public List<IssueDetails> getAllIssuesDetail() {
+      return getAllIssues().stream()
+              .map(it -> new IssueDetails(
+                      bookRepository.getBookById(it.getBookId()).getName(),
+                      readerRepository.getReaderById(it.getReaderId()).getName(),
+                      it.getIssued_at(),
+                      it.getReturned_at()
+              ))
+              .collect(Collectors.toList());
+    }
 }
