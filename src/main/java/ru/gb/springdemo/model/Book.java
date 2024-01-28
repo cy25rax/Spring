@@ -1,19 +1,22 @@
 package ru.gb.springdemo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
+@Entity
+@Table(name = "books")
+@NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Book {
 
-  public static long sequence = 1L;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-  private final long id;
-  private final String name;
-
-  public Book(String name) {
-    this(sequence++, name);
-  }
+  @Column(name = "name")
+  private String name;
 
 }

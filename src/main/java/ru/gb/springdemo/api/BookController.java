@@ -17,12 +17,12 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteBook(@PathVariable Long id) {
-        return bookService.deleteBook(id);
+    public void deleteBook(@PathVariable Long id) {
+        bookService.deleteBook(id);
     }
 
     @PostMapping
-    public boolean createBook(@RequestBody Book book) {
+    public Book createBook(@RequestBody Book book) {
         return bookService.createBook(book);
     }
 }

@@ -25,12 +25,12 @@ public class ReaderController {
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteReader(@PathVariable Long id) {
-        return readerService.deleteReader(id);
+    public void deleteReader(@PathVariable Long id) {
+        readerService.deleteReader(id);
     }
 
     @PostMapping
-    public boolean createReader(@RequestBody Reader reader) {
+    public Reader createReader(@RequestBody Reader reader) {
         return readerService.createReader(reader);
     }
 }
