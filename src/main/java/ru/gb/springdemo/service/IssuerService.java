@@ -2,7 +2,7 @@ package ru.gb.springdemo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.gb.springdemo.api.IssueRequest;
+import ru.gb.springdemo.dto.IssueRequest;
 import ru.gb.springdemo.dto.IssueDetails;
 import ru.gb.springdemo.exceptions.ReaderMaxAllowedBookException;
 import ru.gb.springdemo.model.Issue;
