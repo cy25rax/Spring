@@ -15,18 +15,18 @@ public class BookService {
 
 
     public Book getBook(Long id) {
-        return bookRepository.getBookById(id);
+        return bookRepository.getReferenceById(id);
     }
 
-    public boolean deleteBook(Long id) {
-        return bookRepository.deleteBook(id);
+    public void deleteBook(Long id) {
+        bookRepository.deleteById(id);
     }
 
-    public boolean createBook(Book book) {
-        return bookRepository.createBook(book);
+    public Book createBook(Book book) {
+        return bookRepository.save(book);
     }
 
     public List<Book> getAllBooks() {
-        return bookRepository.getAllBooks();
+        return bookRepository.findAll();
     }
 }

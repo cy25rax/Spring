@@ -22,15 +22,15 @@ public class ReaderService {
 
 
     public Reader getReader(Long id) {
-        return readerRepository.getReaderById(id);
+        return readerRepository.getReferenceById(id);
     }
 
-    public boolean deleteReader(Long id) {
-        return readerRepository.deleteReaderById(id);
+    public void deleteReader(Long id) {
+         readerRepository.deleteById(id);
     }
 
-    public boolean createReader(Reader reader) {
-        return readerRepository.createReader(reader);
+    public Reader createReader(Reader reader) {
+        return readerRepository.save(reader);
     }
 
     public List<Issue> getAllIssueByReaderId(Long id) {
@@ -38,13 +38,14 @@ public class ReaderService {
     }
 
     public List<Reader> getAllReaders() {
-        return readerRepository.getAllReaders();
+        System.out.println(readerRepository.findAll());
+        return readerRepository.findAll();
     }
 
     public List<ReadersDetails> getAllBooksNames(Long id) {
         return getAllIssueByReaderId(id).stream()
                 .map(x -> new ReadersDetails(
-                        bookRepository.getBookById(x.getBookId()),
+                        bookRepository.getReferenceById(x.getBookId()),
                         x))
                 .collect(Collectors.toList());
     }

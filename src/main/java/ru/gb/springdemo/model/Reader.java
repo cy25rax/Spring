@@ -1,23 +1,32 @@
 package ru.gb.springdemo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
-@RequiredArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Entity
+@NoArgsConstructor
+@Table(name = "readers")
+@Schema(description = "Сущность читатель")
 public class Reader {
 
-  public static long sequence = 1L;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Schema(description = "Идентификатор")
+  private Long id;
 
-  private final long id;
-  private final String name;
-//  @Value("${reader.maxBookCount}")
-  private int maxBookCount;
+  @Column(name = "user_name")
+  @Schema(description = "Имя читателя", example = "Игорь")
+  private String name;
 
-  public Reader(String name) {
-    this(sequence++, name);
-  }
+  @Column(name = "max_book_count")
+  @Value("${reader.maxBookCount}")
+  @Schema(description = "Максимальное число выдачей", example = "5")
+  private Integer maxBookCount;
 
 }

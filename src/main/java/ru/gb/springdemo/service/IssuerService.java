@@ -2,7 +2,7 @@ package ru.gb.springdemo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.gb.springdemo.api.IssueRequest;
+import ru.gb.springdemo.dto.IssueRequest;
 import ru.gb.springdemo.dto.IssueDetails;
 import ru.gb.springdemo.exceptions.ReaderMaxAllowedBookException;
 import ru.gb.springdemo.model.Issue;
@@ -11,6 +11,7 @@ import ru.gb.springdemo.repository.BookRepository;
 import ru.gb.springdemo.repository.IssueRepository;
 import ru.gb.springdemo.repository.ReaderRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -25,10 +26,10 @@ public class IssuerService {
   private final IssueRepository issueRepository;
 
   public Issue issue(IssueRequest request) {
-    if (bookRepository.getBookById(request.getBookId()) == null) {
+    if (bookRepository.getReferenceById(request.getBookId()) == null) {
       throw new NoSuchElementException("Book not found with id: \"" + request.getBookId() + "\"");
     }
-    Reader reader = readerRepository.getReaderById(request.getReaderId());
+    Reader reader = readerRepository.getReferenceById(request.getReaderId());
     if (reader == null) {
       throw new NoSuchElementException("Reader not found with id: \"" + request.getReaderId() + "\"");
     }
@@ -44,32 +45,30 @@ public class IssuerService {
   }
 
   public Issue getIssueById(Long id) {
-    return issueRepository.getIssueById(id);
+    return issueRepository.getReferenceById(id);
   }
 
   public Issue closeIssue(Long issueID) {
-    Issue issue = issueRepository.getIssueById(issueID);
+    Issue issue = issueRepository.getReferenceById(issueID);
     if (issue == null) {
       throw new NoSuchElementException("Issue not found with id: \"" + issueID + "\"");
     }
-    Reader reader = readerRepository.getReaderById(issue.getReaderId());
+    Reader reader = readerRepository.getReferenceById(issue.getReaderId());
     reader.setMaxBookCount(reader.getMaxBookCount() + 1);
-    Issue closedIssue = issueRepository.closeIssue(issueID);
-    if (closedIssue == null) {
-      throw new NoSuchElementException("Issue already closed with id: \"" + issueID + "\"");
-    }
-    return closedIssue;
+    issue.setReturned_at(LocalDateTime.now());
+    issueRepository.save(issue);
+    return issue;
   }
 
     public List<Issue> getAllIssues() {
-      return issueRepository.getAllIssues();
+      return issueRepository.findAll();
     }
 
     public List<IssueDetails> getAllIssuesDetail() {
       return getAllIssues().stream()
               .map(it -> new IssueDetails(
-                      bookRepository.getBookById(it.getBookId()).getName(),
-                      readerRepository.getReaderById(it.getReaderId()).getName(),
+                      bookRepository.getReferenceById(it.getBookId()).getName(),
+                      readerRepository.getReferenceById(it.getReaderId()).getName(),
                       it.getIssued_at(),
                       it.getReturned_at()
               ))
