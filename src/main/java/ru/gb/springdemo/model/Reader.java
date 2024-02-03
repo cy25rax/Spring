@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.Collection;
+
 @Data
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
@@ -23,6 +25,15 @@ public class Reader {
   @Column(name = "user_name")
   @Schema(description = "Имя читателя", example = "Игорь")
   private String name;
+
+  @Column(name = "password")
+  private String password;
+
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "readers_roles",
+          joinColumns = @JoinColumn(name = "reader_id"),
+          inverseJoinColumns = @JoinColumn(name = "role_id"))
+  private Collection<Role> roles;
 
   @Column(name = "max_book_count")
   @Value("${reader.maxBookCount}")

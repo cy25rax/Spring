@@ -38,7 +38,6 @@ public class ReaderService {
     }
 
     public List<Reader> getAllReaders() {
-        System.out.println(readerRepository.findAll());
         return readerRepository.findAll();
     }
 
