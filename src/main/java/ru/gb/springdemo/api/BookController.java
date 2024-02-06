@@ -3,6 +3,7 @@ package ru.gb.springdemo.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.springdemo.model.Book;
 import ru.gb.springdemo.service.BookService;
@@ -19,6 +20,7 @@ public class BookController {
             summary = "Показать книгу",
             description = "Выводит книгу с указанным ID"
     )
+    @Secured("ROLE_USER")
     public Book getBook(@PathVariable Long id) {
         return bookService.getBook(id);
     }
