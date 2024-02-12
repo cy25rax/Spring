@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+import ru.gb.springdemo.aspect.RecoverException;
+import ru.gb.springdemo.aspect.Timer;
 import ru.gb.springdemo.model.Book;
 import ru.gb.springdemo.service.BookService;
 
@@ -20,9 +22,12 @@ public class BookController {
             summary = "Показать книгу",
             description = "Выводит книгу с указанным ID"
     )
-    @Secured("ROLE_USER")
+//    @Secured("ROLE_USER")
+//    @Timer
+    @RecoverException(noRecoverFor = {RuntimeException.class, IllegalArgumentException.class})
     public Book getBook(@PathVariable Long id) {
-        return bookService.getBook(id);
+        throw new ClassCastException("exception on get Book");
+//        return bookService.getBook(id);
     }
 
     @DeleteMapping("/{id}")

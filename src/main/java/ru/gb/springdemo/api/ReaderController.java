@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.gb.springdemo.aspect.Timer;
 import ru.gb.springdemo.model.Issue;
 import ru.gb.springdemo.model.Reader;
 import ru.gb.springdemo.service.ReaderService;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/reader")
 @Tag(name="reader controller", description="контролер для работы с читателями")
+@Timer
 public class ReaderController {
     @Autowired
     private ReaderService readerService;
