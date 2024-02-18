@@ -26,8 +26,8 @@ public class BookController {
 //    @Timer
     @RecoverException(noRecoverFor = {RuntimeException.class, IllegalArgumentException.class})
     public Book getBook(@PathVariable Long id) {
-        throw new ClassCastException("exception on get Book");
-//        return bookService.getBook(id);
+//        throw new ClassCastException("exception on get Book");
+        return bookService.getBook(id);
     }
 
     @DeleteMapping("/{id}")
