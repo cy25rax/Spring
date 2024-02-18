@@ -3,7 +3,7 @@ package ru.gb.springdemo.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
+//import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.springdemo.aspect.RecoverException;
 import ru.gb.springdemo.aspect.Timer;
